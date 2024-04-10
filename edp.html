@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form, Table, and Search Bar</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="edp.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-8">
+        <!-- Form -->
+        <form id="dataForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">First Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName" type="text" placeholder="First Name" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">Last Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName" type="text" placeholder="Last Name" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+                <div class="flex items-center">
+                    <input class="mr-2 leading-tight" type="radio" name="gender" id="male" value="male">
+                    <label class="text-sm" for="male">Male</label>
+                </div>
+                <div class="flex items-center">
+                    <input class="mr-2 leading-tight" type="radio" name="gender" id="female" value="female">
+                    <label class="text-sm" for="female">Female</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="age">Age</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="age" type="number" placeholder="Age" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="position">Position</label>
+                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" required>
+                    <option value="">Select Position</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="student">Student</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+        </form>
+
+        <!-- Radio Button for Gender Filtering -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Filter by Gender</label>
+            <div class="flex items-center">
+                <input class="mr-2 leading-tight" type="radio" name="filterGender" id="filterMale" value="male">
+                <label class="text-sm" for="filterMale">Male</label>
+            </div>
+            <div class="flex items-center">
+                <input class="mr-2 leading-tight" type="radio" name="filterGender" id="filterFemale" value="female">
+                <label class="text-sm" for="filterFemale">Female</label>
+            </div>
+        </div>
+
+        <!-- Radio Button for Position Filtering -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Filter by Position</label>
+            <div class="flex items-center">
+                <input class="mr-2 leading-tight" type="radio" name="filterPosition" id="filterTeacher" value="teacher">
+                <label class="text-sm" for="filterTeacher">Teacher</label>
+            </div>
+            <div class="flex items-center">
+                <input class="mr-2 leading-tight" type="radio" name="filterPosition" id="filterStudent" value="student">
+                <label class="text-sm" for="filterStudent">Student</label>
+            </div>
+        </div>
+
+        <!-- Range Filter for Age -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Filter by Age Range</label>
+            <div class="flex">
+                <input class="mr-2 appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="minAgeRange" type="number" placeholder="Min Age">
+                <span class="mx-2">to</span>
+                <input class="ml-2 appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="maxAgeRange" type="number" placeholder="Max Age">
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Search for participant</label>
+            <input type="text" id="searchInput" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Search...">
+        </div>
+
+        <!-- Table -->
+        <table id="dataTable" class="border-collapse border border-gray-400 bg-white shadow-md rounded w-full">
+            <thead>
+                <tr>
+                    <th class="border border-gray-400 px-4 py-2">Full Name</th>
+                    <th class="border border-gray-400 px-4 py-2">Gender</th>
+                    <th class="border border-gray-400 px-4 py-2">Age</th>
+                    <th class="border border-gray-400 px-4 py-2">Position</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Table data will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to handle form submission
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const age = document.getElementById('age').value;
+            const position = document.getElementById('position').value;
+            // Add data to the table
+            addDataToTable(firstName + ' ' + lastName, gender, age, position);
+            // Clear form fields
+            this.reset();
+        });
+
+        // Function to add data to the table
+        function addDataToTable(fullName, gender, age, position) {
+            const tableBody = document.getElementById('tableBody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="border border-gray-400 px-4 py-2">${fullName}</td>
+                <td class="border border-gray-400 px-4 py-2">${gender}</td>
+                <td class="border border-gray-400 px-4 py-2">${age}</td>
+                <td class="border border-gray-400 px-4 py-2">${position}</td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+
+        // Filter table based on selected gender
+        document.querySelectorAll('input[name="filterGender"]').forEach((input) => {
+            input.addEventListener('change', function() {
+                const selectedGender = this.value;
+                const tableRows = document.querySelectorAll('#tableBody tr');
+
+                tableRows.forEach(row => {
+                    const genderCell = row.cells[1].innerText.toLowerCase(); // Assuming gender is in the second cell
+                    if (selectedGender === genderCell) {
+                        row.style.display = ''; // Show row if gender matches
+                    } else {
+                        row.style.display = 'none'; // Hide row if gender does not match
+                    }
+                });
+            });
+        });
+
+        // Filter table based on selected position
+        document.querySelectorAll('input[name="filterPosition"]').forEach((input) => {
+            input.addEventListener('change', function() {
+                const selectedPosition = this.value;
+                const tableRows = document.querySelectorAll('#tableBody tr');
+
+                tableRows.forEach(row => {
+                    const positionCell = row.cells[3].innerText.toLowerCase(); // Assuming position is in the fourth cell
+                    if (selectedPosition === positionCell) {
+                        row.style.display = ''; // Show row if position matches
+                    } else {
+                        row.style.display = 'none'; // Hide row if position does not match
+                    }
+                });
+            });
+        });
+
+        // Filter table based on age range
+        document.getElementById('minAgeRange').addEventListener('input', function() {
+            filterByAgeRange();
+        });
+
+        document.getElementById('maxAgeRange').addEventListener('input', function() {
+            filterByAgeRange();
+        });
+
+        function filterByAgeRange() {
+            const minAge = parseInt(document.getElementById('minAgeRange').value) || 0;
+            const maxAge = parseInt(document.getElementById('maxAgeRange').value) || Infinity;
+            const tableRows = document.querySelectorAll('#tableBody tr');
+
+            tableRows.forEach(row => {
+                const ageCell = parseInt(row.cells[2].innerText); // Assuming age is in the third cell
+                if (ageCell >= minAge && ageCell <= maxAge) {
+                    row.style.display = ''; // Show row if age is within the range
+                } else {
+                    row.style.display = 'none'; // Hide row if age is not within the range
+                }
+            });
+        }
+
+        // Search Mechanism
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#tableBody tr');
+
+            tableRows.forEach(row => {
+                const fullName = row.cells[0].innerText.toLowerCase();
+                if (fullName.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Function to reset table display when search is cleared
+        document.getElementById('searchInput').addEventListener('blur', function() {
+            if (this.value === '') {
+                const tableRows = document.querySelectorAll('#tableBody tr');
+                tableRows.forEach(row => {
+                    row.style.display = ''; // Show all rows
+                });
+            }
+        });
+    </script>
+</body>
+</html>
